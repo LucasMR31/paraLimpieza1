@@ -1,4 +1,4 @@
-package org.example;
+package org.LucasMartinez;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -12,33 +12,48 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
 
-public class UserManager {
+/**
+ * Clase que gestiona una lista de usuarios
+ * @author [LucasMartinezRodriguez]
+ */
+public class GestionUsuario {
 
     private Gson gson = new Gson();
-    private List<user> users = new ArrayList<>();
+    private List<Usuario> users = new ArrayList<>();
 
-    public UserManager() {
+    public GestionUsuario() {
         load();
     }
 
-    public void addUser(user u) {
+    /**
+     * Añade usuario a la lista
+     */
+    public void addUser(Usuario u) {
         if (u == null)
             return;
         users.add(u);
         save();
     }
 
-    public Optional<user> findUser(String username) {
+    /**
+     * Busca usuario por nombre
+     */
+    public Optional<Usuario> findUser(String username) {
         return users.stream()
                 .filter(u -> u.getUsername().equalsIgnoreCase(username))
                 .findFirst();
     }
 
+    /**
+     * Muestra la lista de usuarios usuarios
+     */
     public void listUsers() {
-        for (user u : users)
+        for (Usuario u : users)
             System.out.println(u);
     }
-
+    /**
+     *Guarda la lista de usuarios
+     */
     private void save() {
         try (FileWriter writer = new FileWriter("users.json")) {
             gson.toJson(users, writer);
@@ -46,10 +61,12 @@ public class UserManager {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Carga la lista de usuarios
+     */
     private void load() {
         try (FileReader reader = new FileReader("users.json")) {
-            Type listType = new TypeToken<ArrayList<user>>(){}.getType();
+            Type listType = new TypeToken<ArrayList<Usuario>>(){}.getType();
             users = gson.fromJson(reader, listType);
             if (users == null) users = new ArrayList<>();
         } catch (IOException e) {
